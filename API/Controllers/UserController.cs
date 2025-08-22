@@ -1,5 +1,6 @@
 using hahn.Application.DTOs;
 using hahn.Application.Users.Commands;
+using hahn.Application.Users.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,10 +23,28 @@ namespace hahn.API.Controllers
             var result = await _mediator.Send(command);
 
             if (!result.Success)
+            {
                 return BadRequest(result.Errors);
+            }
 
-            return Ok(result.Data); 
+
+            return Ok(result);
         }
+
+        [HttpGet("connected")]
+        public async Task<IActionResult> GetConnectedUser()
+        {
+            var result = await _mediator.Send(new GetConnectedUserQuery());
+
+            if (!result.Success)
+            {
+                return BadRequest(result.Errors);
+            }
+
+
+            return Ok(result);
+        }
+
     }
 
 }

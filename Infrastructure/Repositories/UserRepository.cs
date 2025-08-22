@@ -15,7 +15,7 @@ namespace hahn.Infrastructure.Repositories
 {
     public class UserRepository(AppDbContext context, IConfiguration config) : IUserRepository
     {
-        public async Task<CustomResult<UserDTO>> AddAsync(CreateUserCommand request)
+        public async Task<UserAuthResult<UserDTO>> AddAsync(CreateUserCommand request)
         {
             
             var folder_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "users");
@@ -60,11 +60,12 @@ namespace hahn.Infrastructure.Repositories
                 username = user.username,
                 role = user.role,
                 phone = user.phone,
-                photo = user.photo
+                photo = user.photo,
+                AuthCompleted = user.AuthCompleted,
             };
 
             var token = CreateToken(userDto);
-            return CustomResult<UserDTO>.Ok(userDto); ;
+            return UserAuthResult<UserDTO>.Ok(userDto,token); ;
         }
 
         public async Task<User> GetUserByEmail(string email)
@@ -72,6 +73,25 @@ namespace hahn.Infrastructure.Repositories
             var user = await context.Users.FirstOrDefaultAsync(u => u.email == email);
             return user;
         }
+
+        public async Task<UserDTO> GetConnectedUser(int userId)
+        {
+
+            var user = await context.Users.FirstOrDefaultAsync(u => u.id == userId);
+            var userDto = new UserDTO
+            {
+                id = user.id,
+                email = user.email,
+                username = user.username,
+                role = user.role,
+                phone = user.phone,
+                photo = user.photo,
+                AuthCompleted = user.AuthCompleted
+            };
+            return userDto;
+
+        }
+
         public async Task<User> GetUserByUsername(string username)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => u.username == username);

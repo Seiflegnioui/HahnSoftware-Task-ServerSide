@@ -22,6 +22,93 @@ namespace hahn.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("hahn.Domain.Entities.Buyer", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("bio")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("brthdate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("joinedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("mySource")
+                        .HasColumnType("int");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Buyers");
+                });
+
+            modelBuilder.Entity("hahn.Domain.Entities.Seller", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("facebook")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("field")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("hasLocal")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("instagram")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("joinedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("mySource")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(4);
+
+                    b.Property<string>("personalSite")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("shopLogo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("shopName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("shopeDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Sellers");
+                });
+
             modelBuilder.Entity("hahn.Domain.Entities.User", b =>
                 {
                     b.Property<int>("id")
@@ -29,6 +116,9 @@ namespace hahn.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<bool>("AuthCompleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("email")
                         .IsRequired()
@@ -64,6 +154,112 @@ namespace hahn.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("hahn.Domain.Entities.Buyer", b =>
+                {
+                    b.HasOne("hahn.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("hahn.Domain.ValueObject.Adress", "adress", b1 =>
+                        {
+                            b1.Property<int>("Buyerid")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("adress")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("city")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("country")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.HasKey("Buyerid");
+
+                            b1.ToTable("Buyers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("Buyerid");
+                        });
+
+                    b.Navigation("User");
+
+                    b.Navigation("adress")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("hahn.Domain.Entities.Seller", b =>
+                {
+                    b.HasOne("hahn.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("hahn.Domain.ValueObject.Adress", "adress", b1 =>
+                        {
+                            b1.Property<int>("Sellerid")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("adress")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("city")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("country")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.HasKey("Sellerid");
+
+                            b1.ToTable("Sellers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("Sellerid");
+                        });
+
+                    b.OwnsOne("hahn.Domain.ValueObject.Adress", "localAdress", b1 =>
+                        {
+                            b1.Property<int>("Sellerid")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("adress")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("city")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("country")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.HasKey("Sellerid");
+
+                            b1.ToTable("Sellers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("Sellerid");
+                        });
+
+                    b.Navigation("User");
+
+                    b.Navigation("adress")
+                        .IsRequired();
+
+                    b.Navigation("localAdress")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

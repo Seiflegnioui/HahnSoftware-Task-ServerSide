@@ -145,3 +145,4 @@ C:\Users\PC\Desktop\Hahn-Project\hahn\obj\Debug\net9.0\refint\hahn.dll
 C:\Users\PC\Desktop\Hahn-Project\hahn\obj\Debug\net9.0\hahn.pdb
 C:\Users\PC\Desktop\Hahn-Project\hahn\obj\Debug\net9.0\hahn.genruntimeconfig.cache
 C:\Users\PC\Desktop\Hahn-Project\hahn\obj\Debug\net9.0\ref\hahn.dll
+C:\Users\PC\Desktop\Hahn-Project\hahn\obj\Debug\net9.0\hahn.sourcelink.json

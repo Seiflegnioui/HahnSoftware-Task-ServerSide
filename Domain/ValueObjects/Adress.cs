@@ -16,7 +16,7 @@ namespace hahn.Domain.ValueObject
         [Required]
         [NotNull]
         public string adress { get; set; }  = string.Empty;
-        private Adress() { }
+        public Adress() { }
         public Adress(string country, string city,string adress)
         {
             if (string.IsNullOrWhiteSpace(country))

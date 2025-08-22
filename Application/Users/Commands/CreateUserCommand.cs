@@ -5,11 +5,11 @@ using MediatR;
 
 namespace hahn.Application.Users.Commands
 {
-public record CreateUserCommand() : IRequest<CustomResult<UserDTO>>    {
-        public string email { get; set; }
-        public string username { get; set; }
-        public string phone { get; set; }
-        public string password { get; set; }
+public record CreateUserCommand() : IRequest<UserAuthResult<UserDTO>> {
+        public string email { get; set; } = string.Empty;
+        public string username { get; set; } = string.Empty;
+        public string phone { get; set; } = string.Empty;
+        public string password { get; set; } = string.Empty;
         public Roles role { get; set; }
         public IFormFile? photo { get; set; } 
     }

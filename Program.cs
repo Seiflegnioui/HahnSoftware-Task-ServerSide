@@ -1,4 +1,3 @@
-using hahn.Application.Users.Commands;
 using hahn.Application.Validators;
 using hahn.Domain.Repositories;
 using hahn.Infrastructure.Presistence;
@@ -11,11 +10,13 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using hahn.Application.Users.Handlers;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddHttpContextAccessor();
 
 var conn = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -28,6 +29,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<ISellerRepository, SellerRepository>();
+builder.Services.AddScoped<IBuyerRepository, BuyerRepository>();
 
 builder.Services.AddMediatR(typeof(CreateUserHandler).Assembly);
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

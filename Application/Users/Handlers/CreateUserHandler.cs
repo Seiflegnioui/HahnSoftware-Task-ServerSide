@@ -1,12 +1,14 @@
 using hahn.Application.DTOs;
+using hahn.Application.Users.Commands;
 using hahn.Application.Validators;
 using hahn.Domain.Entities;
 using hahn.Domain.Repositories;
 using MediatR;
 
-namespace hahn.Application.Users.Commands
+namespace hahn.Application.Users.Handlers
 {
-    public class CreateUserHandler : IRequestHandler<CreateUserCommand,CustomResult<UserDTO> >
+
+    public class CreateUserHandler : IRequestHandler<CreateUserCommand, UserAuthResult<UserDTO>>
     {
         private readonly IUserRepository _userRepository;
 
@@ -15,25 +17,20 @@ namespace hahn.Application.Users.Commands
             _userRepository = userRepository;
         }
 
-public async Task<CustomResult<UserDTO>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
-{
-    var duplicatedEmail = await _userRepository.GetUserByEmail(request.email);
+        public async Task<UserAuthResult<UserDTO>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        {
+            var duplicatedEmail = await _userRepository.GetUserByEmail(request.email);
+            if (duplicatedEmail != null)
+                return UserAuthResult<UserDTO>.Fail(new List<string> { "email already existed!" });
 
-    if (duplicatedEmail is not null)
-    {
-        return CustomResult<UserDTO>.Fail(new List<string>(){"email already existed!"});
+            var duplicatedUsername = await _userRepository.GetUserByUsername(request.username);
+            if (duplicatedUsername != null)
+                return UserAuthResult<UserDTO>.Fail(new List<string> { "username already existed!" });
+
+            var user = await _userRepository.AddAsync(request);
+            return user;
+        }
     }
 
-    var duplicatedUsername = await _userRepository.GetUserByEmail(request.email);
 
-    if (duplicatedUsername is not null)
-    {
-        return CustomResult<UserDTO>.Fail(new List<string>(){"useRname already existed!"});
-    }
-
-    var user = await _userRepository.AddAsync(request);
-    return user;
-}
-
-    }
 }
