@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using hahn.Application.DTOs;
 using hahn.Application.Seller.Commands;
+using hahn.Application.Seller.Queries;
 using hahn.Application.Users.Commands;
 using hahn.Application.Validators;
 using hahn.Domain.Entities;
@@ -40,9 +41,14 @@ namespace hahn.Infrastructure.Repositories
                 filename = "default.png";
             }
 
+            var user = await context.Users.FirstOrDefaultAsync(u => u.id == userId, cancellationToken);
+            user.AuthCompleted = true;
+            context.Users.Update(user);
+
             var seller = new Seller()
             {
                 userId = userId,
+                User = user,
                 adress = request.adress,
                 field = request.field,
                 hasLocal = request.hasLocal,
@@ -56,9 +62,6 @@ namespace hahn.Infrastructure.Repositories
                 shopeDescription = request.shopDescription,
             };
 
-            var user = await context.Users.FirstOrDefaultAsync(u => u.id == userId, cancellationToken);
-            user.AuthCompleted = true;
-            context.Users.Update(user);
             await context.Sellers.AddAsync(seller, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
 
@@ -79,23 +82,28 @@ namespace hahn.Infrastructure.Repositories
                 rating = seller.rating,
                 mySource = seller.mySource,
                 joinedAt = seller.joinedAt,
+
+                email = seller.User.email,
+                username = seller.User.username,
+                photo = seller.User.photo,
             };
 
             return CustomResult<SellerDTO>.Ok(sellerDTO);
         }
 
-        public async Task<CustomResult<SellerDTO>> GetSellerByIdAsync(int userId, CancellationToken cancellationToken)
+        public async Task<CustomResult<SellerDTO>> GetSellerByIdAsync(GetSellerByIdQuery request, CancellationToken cancellationToken)
         {
             var seller = await context.Sellers
-                .FirstOrDefaultAsync(s => s.userId == userId, cancellationToken);
+                .FirstOrDefaultAsync(s => s.userId == request.UserId, cancellationToken);
 
             if (seller == null)
             {
-                return CustomResult<SellerDTO>.Fail(new List<string> { "Seller not found" });
+                return CustomResult<SellerDTO>.Fail(new List<string> { $"Seller {request.UserId} not found" });
             }
 
             var sellerDto = new SellerDTO
             {
+                id = seller.id,
                 userId = seller.userId,
                 shopName = seller.shopName,
                 shopLogo = seller.shopLogo,

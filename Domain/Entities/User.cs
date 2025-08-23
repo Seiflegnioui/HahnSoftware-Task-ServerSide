@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using hahn.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace hahn.Domain.Entities
@@ -13,17 +14,13 @@ namespace hahn.Domain.Entities
         public string phone { get; set; } = string.Empty;
         public string username { get; set; } = string.Empty;
         public string hashedPpassword { get; set; } = string.Empty;
-        public Roles role { get; set; }
+        public RolesEnum role { get; set; }
         public bool AuthCompleted { get; set; } = false;
         public string? photo { get; set; }
         public DateTime joinedAt { get; set; } = DateTime.Now;
 
     }
+    
 
-    public enum Roles
-    {
-        ADMIN,
-        SELLER,
-        BUYER
-    }
+ 
 }

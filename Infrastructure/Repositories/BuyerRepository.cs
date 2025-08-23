@@ -1,4 +1,5 @@
 using hahn.Application.Buyer.Commands;
+using hahn.Application.Buyer.Queries;
 using hahn.Application.DTOs;
 using hahn.Application.Validators;
 using hahn.Domain.Entities;
@@ -43,5 +44,28 @@ namespace hahn.Infrastructure.Repositories
             return CustomResult<BuyerDTO>.Ok(buyerDTO);
         }
 
+        public async Task<CustomResult<BuyerDTO>> GetBuyerByIdAsync(GetBuyerByIdQuery request, CancellationToken cancellationToken)
+        {
+             var seller = await context.Buyers
+                .FirstOrDefaultAsync(s => s.userId == request.UserId, cancellationToken);
+
+            if (seller == null)
+            {
+                return CustomResult<BuyerDTO>.Fail(new List<string> { $"Buyer {request.UserId} not found" });
+            }
+
+            var buyerDto = new BuyerDTO
+            {
+                userId = seller.userId,
+                bio = seller.bio,
+                brthdate = seller.brthdate,
+                id = seller.id,
+                adress = seller.adress,
+                mySource = seller.mySource,
+                joinedAt = seller.joinedAt
+            };
+
+            return CustomResult<BuyerDTO>.Ok(buyerDto);
+        }
     }
 }

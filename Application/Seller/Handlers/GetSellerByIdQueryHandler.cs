@@ -21,7 +21,7 @@ namespace hahn.Application.Seller.Handlers
 
         public async Task<CustomResult<SellerDTO>> Handle(GetSellerByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _sellerRepository.GetSellerByIdAsync(request.UserId, cancellationToken);
+            return await _sellerRepository.GetSellerByIdAsync(request, cancellationToken);
         }
     }
 

@@ -21,6 +21,13 @@ namespace hahn.Application.DTOs
         public Sources mySource { get; set; } = Sources.Other;
         public DateTime joinedAt { get; set; } = DateTime.Now;
 
+        public string? username { get; set; }
+        public string? email { get; set; }
+        public string? photo { get; set; }
 
+        public static implicit operator SellerDTO(UserDTO v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

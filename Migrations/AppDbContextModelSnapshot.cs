@@ -52,6 +52,83 @@ namespace hahn.Migrations
                     b.ToTable("Buyers");
                 });
 
+            modelBuilder.Entity("hahn.Domain.Entities.Order", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<DateTime>("addedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("buyerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("productId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("state")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("buyerId");
+
+                    b.HasIndex("productId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("hahn.Domain.Entities.Product", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<DateTime>("addedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("category")
+                        .HasColumnType("int");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("price")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("reviews")
+                        .HasColumnType("int");
+
+                    b.Property<int>("sellerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("sellerId");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("hahn.Domain.Entities.Seller", b =>
                 {
                     b.Property<int>("id")
@@ -193,6 +270,36 @@ namespace hahn.Migrations
 
                     b.Navigation("adress")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("hahn.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("hahn.Domain.Entities.Buyer", "Buyer")
+                        .WithMany()
+                        .HasForeignKey("buyerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("hahn.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("productId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Buyer");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("hahn.Domain.Entities.Product", b =>
+                {
+                    b.HasOne("hahn.Domain.Entities.Seller", "User")
+                        .WithMany()
+                        .HasForeignKey("sellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("hahn.Domain.Entities.Seller", b =>

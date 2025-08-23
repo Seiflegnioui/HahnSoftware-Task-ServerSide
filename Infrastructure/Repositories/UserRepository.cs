@@ -17,7 +17,7 @@ namespace hahn.Infrastructure.Repositories
     {
         public async Task<UserAuthResult<UserDTO>> AddAsync(CreateUserCommand request)
         {
-            
+
             var folder_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "users");
             if (!Directory.Exists(folder_path))
                 Directory.CreateDirectory(folder_path);
@@ -65,7 +65,7 @@ namespace hahn.Infrastructure.Repositories
             };
 
             var token = CreateToken(userDto);
-            return UserAuthResult<UserDTO>.Ok(userDto,token); ;
+            return UserAuthResult<UserDTO>.Ok(userDto, token); ;
         }
 
         public async Task<User> GetUserByEmail(string email)
@@ -98,7 +98,7 @@ namespace hahn.Infrastructure.Repositories
             return user;
         }
 
-      private string CreateToken(UserDTO user)
+        private string CreateToken(UserDTO user)
         {
             var claims = new List<Claim>
             {
@@ -120,5 +120,32 @@ namespace hahn.Infrastructure.Repositories
             );
             return new JwtSecurityTokenHandler().WriteToken(descriptor);
         }
+
+        public async Task<UserAuthResult<UserDTO>> LoginAsyn(LoginUserCommand request)
+        {
+            var user = await GetUserByEmail(request.email);
+            if (user == null)
+            {
+                return  UserAuthResult<UserDTO>.Fail(["Email or password is wrong or not registered"]);
+            }
+            if (new PasswordHasher<User>().VerifyHashedPassword(user, user.hashedPpassword, request.password) == PasswordVerificationResult.Failed)
+            {
+                return UserAuthResult<UserDTO>.Fail(["Email or password is wrong or not registered"]);
+
+            }
+            var dto = new UserDTO()
+            {
+                id = user.id,
+                email = user.email,
+                phone = user.phone,
+                AuthCompleted = user.AuthCompleted,
+                role = user.role,
+                photo = user.photo!,
+                username = user.username
+            };
+            var token = CreateToken(dto);
+            return UserAuthResult<UserDTO>.Ok(dto, token);
+
+        }
     }
-    };
+};

@@ -31,6 +31,18 @@ namespace hahn.API.Controllers
             return Ok(result);
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (result == null)
+            {
+                return BadRequest(result.Errors);
+            }
+            return Ok(result);
+        }
+
         [HttpGet("connected")]
         public async Task<IActionResult> GetConnectedUser()
         {

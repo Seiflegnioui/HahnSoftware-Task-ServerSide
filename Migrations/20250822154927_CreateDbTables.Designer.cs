@@ -12,8 +12,8 @@ using hahn.Infrastructure.Presistence;
 namespace hahn.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250822020424_BuyerTable")]
-    partial class BuyerTable
+    [Migration("20250822154927_CreateDbTables")]
+    partial class CreateDbTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,6 +53,51 @@ namespace hahn.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("Buyers");
+                });
+
+            modelBuilder.Entity("hahn.Domain.Entities.Product", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<DateTime>("addedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("category")
+                        .HasColumnType("int");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("price")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("reviews")
+                        .HasColumnType("int");
+
+                    b.Property<int>("sellerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("sellerId");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("hahn.Domain.Entities.Seller", b =>
@@ -119,6 +164,9 @@ namespace hahn.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<bool>("AuthCompleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("email")
                         .IsRequired()
@@ -193,6 +241,17 @@ namespace hahn.Migrations
 
                     b.Navigation("adress")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("hahn.Domain.Entities.Product", b =>
+                {
+                    b.HasOne("hahn.Domain.Entities.Seller", "User")
+                        .WithMany()
+                        .HasForeignKey("sellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("hahn.Domain.Entities.Seller", b =>

@@ -13,5 +13,8 @@ namespace hahn.Application.DTOs
         public Sources mySource { get; set; }
         public DateTime joinedAt { get; set; }
 
+        public string? username { get; set; } = null!;
+        public string? email { get; set; }
+        public string? photo { get; set; }
     }
 }
