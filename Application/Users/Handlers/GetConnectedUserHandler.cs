@@ -17,8 +17,18 @@ public class GetConnectedUserHandler(IHttpContextAccessor http, IUserRepository 
             return CustomResult<UserDTO>.Fail(new List<string>() { "User not authenticated." });
 
         var userId = int.Parse(userIdClaim);
-        var userDto = await repository.GetConnectedUser(userId);
-        return CustomResult<UserDTO>.Ok(userDto);
+        var user = await repository.GetConnectedUser(userId);
+        
+        var dto = new UserDTO{
+                id = user.id,
+                email = user.email,
+                username = user.username,
+                role = user.role,
+                phone = user.phone,
+                photo = user.photo,
+                AuthCompleted = user.AuthCompleted
+            };
+        return CustomResult<UserDTO>.Ok(dto);
     }
 }
 }

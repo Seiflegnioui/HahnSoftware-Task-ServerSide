@@ -1,14 +1,8 @@
 using System.Security.Claims;
 using FluentValidation;
-using hahn.Application.Buyer.Commands;
-using hahn.Application.DTOs;
-using hahn.Application.Validators;
-using hahn.Domain.Entities;
-using hahn.Domain.Repositories;
-using hahn.Domain.ValueObject;
-using MediatR;
+using hahn.Application.buyer.Commands;
 
-namespace hahn.Application.Buyer.Validators
+namespace hahn.Application.buyer.Validators
 {
     public class CreateBuyerValidator : AbstractValidator<CreateBuyerCommand>
     {

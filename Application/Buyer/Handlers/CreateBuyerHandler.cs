@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using hahn.Application.Buyer.Commands;
+using hahn.Application.buyer.Commands;
 using hahn.Application.DTOs;
 using hahn.Application.Validators;
 using hahn.Domain.Entities;
@@ -7,7 +7,7 @@ using hahn.Domain.Repositories;
 using hahn.Domain.ValueObject;
 using MediatR;
 
-namespace hahn.Application.Buyer.Handlers
+namespace hahn.Application.buyer.Handlers
 {
     public class CreateBuyerHandler(IHttpContextAccessor http,IBuyerRepository repository) : IRequestHandler<CreateBuyerCommand, CustomResult<BuyerDTO>>
     {
@@ -19,9 +19,27 @@ namespace hahn.Application.Buyer.Handlers
 
             var userId = int.Parse(userIdClaim);
 
-            var result = await repository.AddBuyerAsync(request,cancellationToken,userId);
+            var buyer = Buyer.Create(
+                userId : userId,
+                adress : request.adress,
+                bio : request.bio,
+                brthdate : request.brthdate,
+                mySource : request.mySource
+            );
+
+            buyer = await repository.AddBuyerAsync(buyer,cancellationToken);
+              var buyerDTO = new BuyerDTO()
+            {
+                id = buyer.id,
+                userId = buyer.userId,
+                adress = buyer.adress,
+                bio = buyer.bio!,
+                brthdate = buyer.brthdate,
+                mySource = buyer.mySource,
+                joinedAt = buyer.joinedAt,
+            };
             
-            return result;
+            return CustomResult<BuyerDTO>.Ok(buyerDTO);
         }
     }
 }

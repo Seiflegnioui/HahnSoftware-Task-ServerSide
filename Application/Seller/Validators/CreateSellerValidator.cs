@@ -1,7 +1,7 @@
 using FluentValidation;
-using hahn.Application.Seller.Commands;
+using hahn.Application.seller.Commands;
 
-namespace hahn.Application.Seller.Validators
+namespace hahn.Application.seller.Validators
 {
     public class CreateSellerValidator : AbstractValidator<CreateSellerCommand>
     {

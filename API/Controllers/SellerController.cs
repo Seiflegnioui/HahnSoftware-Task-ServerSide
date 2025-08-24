@@ -1,6 +1,6 @@
 using hahn.Application.DTOs;
-using hahn.Application.Seller.Commands;
-using hahn.Application.Seller.Queries;
+using hahn.Application.seller.Commands;
+using hahn.Application.seller.Queries;
 using hahn.Domain.Entities;
 using hahn.Domain.Enums;
 using MediatR;

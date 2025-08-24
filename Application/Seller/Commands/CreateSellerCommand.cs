@@ -1,10 +1,11 @@
 using hahn.Application.DTOs;
 using hahn.Application.Validators;
 using hahn.Domain.Entities;
+using hahn.Domain.Enums;
 using hahn.Domain.ValueObject;
 using MediatR;
 
-namespace hahn.Application.Seller.Commands
+namespace hahn.Application.seller.Commands
 {
     public class CreateSellerCommand : IRequest<CustomResult<SellerDTO>> 
     {

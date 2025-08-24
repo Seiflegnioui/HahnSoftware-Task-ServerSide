@@ -1,7 +1,7 @@
 using FluentValidation;
-using hahn.Application.Order.Commands;
+using hahn.Application.order.Commands;
 
-namespace hahn.Application.Order.Validators
+namespace hahn.Application.order.Validators
 {
     public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
     {

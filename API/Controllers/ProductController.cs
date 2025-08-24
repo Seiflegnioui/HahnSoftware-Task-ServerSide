@@ -1,9 +1,5 @@
-using hahn.Application.Buyer.Commands;
-using hahn.Application.DTOs;
-using hahn.Application.Product.Commands;
-using hahn.Application.Product.Queries;
-using hahn.Application.Seller.Commands;
-using hahn.Domain.Entities;
+using hahn.Application.product.Commands;
+using hahn.Application.product.Queries;
 using hahn.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +19,7 @@ namespace hahn.API.Controllers
             _mediator = mediator;
         }
 
-        // [Authorize(Roles = nameof(RolesEnum.SELLER))]
+        [Authorize(Roles = nameof(RolesEnum.SELLER))]
         [HttpPost("create")]
         public async Task<IActionResult> CreateProduct(CreateProductCommand command)
         {
@@ -46,6 +42,8 @@ namespace hahn.API.Controllers
 
             return Ok(result);
         }
+
+        [Authorize(Roles = nameof(RolesEnum.SELLER))]
 
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteProduct([FromQuery] DeleteProductCommand command)

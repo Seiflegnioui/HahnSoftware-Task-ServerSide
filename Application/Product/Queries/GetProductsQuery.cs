@@ -2,7 +2,7 @@ using hahn.Application.DTOs;
 using hahn.Application.Validators;
 using MediatR;
 
-namespace hahn.Application.Product.Queries
+namespace hahn.Application.product.Queries
 {
     public class GetProductsQuery : IRequest<CustomResult<ProductDTO>>
     {

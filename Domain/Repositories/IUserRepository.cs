@@ -8,10 +8,9 @@ namespace hahn.Domain.Repositories
 {
     public interface IUserRepository
     {
-        Task<UserAuthResult<UserDTO>> AddAsync(CreateUserCommand request);
-        Task<UserAuthResult<UserDTO>> LoginAsyn(LoginUserCommand request);
+        Task<User> AddAsync(User user);
         Task<User> GetUserByEmail(string email);
         Task<User> GetUserByUsername(string username);
-        Task<UserDTO> GetConnectedUser(int userId);
+        Task<User> GetConnectedUser(int userId);
             }
 }

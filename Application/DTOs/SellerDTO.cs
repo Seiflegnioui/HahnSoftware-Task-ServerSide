@@ -1,4 +1,5 @@
 using hahn.Domain.Entities;
+using hahn.Domain.Enums;
 using hahn.Domain.ValueObject;
 
 namespace hahn.Application.DTOs

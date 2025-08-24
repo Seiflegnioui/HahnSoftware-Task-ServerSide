@@ -52,6 +52,43 @@ namespace hahn.Migrations
                     b.ToTable("Buyers");
                 });
 
+            modelBuilder.Entity("hahn.Domain.Entities.Notification", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("notifiedId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("notifierId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("seen")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("subject")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("time")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("notifiedId");
+
+                    b.HasIndex("notifierId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("hahn.Domain.Entities.Order", b =>
                 {
                     b.Property<int>("id")
@@ -270,6 +307,23 @@ namespace hahn.Migrations
 
                     b.Navigation("adress")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("hahn.Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("hahn.Domain.Entities.User", "Notified")
+                        .WithMany()
+                        .HasForeignKey("notifiedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("hahn.Domain.Entities.User", "Notifier")
+                        .WithMany()
+                        .HasForeignKey("notifierId");
+
+                    b.Navigation("Notified");
+
+                    b.Navigation("Notifier");
                 });
 
             modelBuilder.Entity("hahn.Domain.Entities.Order", b =>

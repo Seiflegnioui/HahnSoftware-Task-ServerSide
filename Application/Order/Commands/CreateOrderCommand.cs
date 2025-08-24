@@ -2,7 +2,7 @@ using hahn.Application.DTOs;
 using hahn.Application.Validators;
 using MediatR;
 
-namespace hahn.Application.Order.Commands
+namespace hahn.Application.order.Commands
 {
     public class CreateOrderCommand : IRequest<CustomResult<OrderDTO>>
     {

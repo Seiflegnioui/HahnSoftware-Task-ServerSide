@@ -1,15 +1,18 @@
-using hahn.Application.Buyer.Commands;
 using hahn.Application.DTOs;
-using hahn.Application.Order.Commands;
-using hahn.Application.Order.Queries;
+using hahn.Application.order.Commands;
+using hahn.Application.order.Queries;
 using hahn.Application.Validators;
+using hahn.Domain.Entities;
+using hahn.Domain.Enums;
 
 namespace hahn.Domain.Repositories
 {
 public interface IOrderRepository
 {
-    Task<CustomResult<OrderDTO>> AddOrderAsync(CreateOrderCommand request, CancellationToken cancellationToken);
-    Task<CustomResult<OrderDTO>> GetOrderAsync(GetOrderQuery request, CancellationToken cancellationToken);
+    Task<Order> AddOrderAsync(Order order, CancellationToken cancellationToken);
+    Task<List<Order>> GetOrderAsync(CancellationToken cancellationToken, int? sellerId = null, int? buyerId = null);
+        Task<Order> UpdateOrderState(Order order,CancellationToken cancellationToken, OrderState state);
+        Task<Order> GetOrderByIdAsync( int id,CancellationToken cancellationToken);
 }
 
 }

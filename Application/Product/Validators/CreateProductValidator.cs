@@ -1,8 +1,8 @@
 using FluentValidation;
-using hahn.Application.Product.Commands;
+using hahn.Application.product.Commands;
 using hahn.Domain.Enums;
 
-namespace hahn.Application.Product.Validators
+namespace hahn.Application.product.Validators
 {
     public class CreateProductValidator : AbstractValidator<CreateProductCommand>
     {

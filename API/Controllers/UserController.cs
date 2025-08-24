@@ -36,11 +36,11 @@ namespace hahn.API.Controllers
         {
             var result = await _mediator.Send(command);
 
-            if (result == null)
+            if (result.Success)
             {
-                return BadRequest(result.Errors);
-            }
             return Ok(result);
+            }
+                return BadRequest(result.Errors);
         }
 
         [HttpGet("connected")]

@@ -1,10 +1,11 @@
 using hahn.Application.DTOs;
 using hahn.Application.Validators;
 using hahn.Domain.Entities;
+using hahn.Domain.Enums;
 using hahn.Domain.ValueObject;
 using MediatR;
 
-namespace hahn.Application.Buyer.Commands
+namespace hahn.Application.buyer.Commands
 {
     public class CreateBuyerCommand : IRequest<CustomResult<BuyerDTO>>
     {
@@ -13,4 +14,6 @@ namespace hahn.Application.Buyer.Commands
         public string bio { get; set; } = string.Empty;
         public Sources mySource { get; set; }
     }
+
+    
 }

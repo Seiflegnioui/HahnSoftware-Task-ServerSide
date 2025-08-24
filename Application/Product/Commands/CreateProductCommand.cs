@@ -3,7 +3,7 @@ using hahn.Application.Validators;
 using hahn.Domain.Enums;
 using MediatR;
 
-namespace hahn.Application.Product.Commands
+namespace hahn.Application.product.Commands
 {
     public class CreateProductCommand : IRequest<CustomResult<ProductDTO>>
     {

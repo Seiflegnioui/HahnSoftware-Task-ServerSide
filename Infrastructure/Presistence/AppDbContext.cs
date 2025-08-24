@@ -1,17 +1,25 @@
+using hahn.Domain;
 using hahn.Domain.Entities;
+using hahn.Domain.Enums;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace hahn.Infrastructure.Presistence
 {
     public class AppDbContext : DbContext
     {
+        private readonly IMediator _mediator;
         public DbSet<User> Users { get; set; }
         public DbSet<Seller> Sellers { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public DbSet<Notification> Notifications { get; set; }
+
+
+        public AppDbContext(DbContextOptions<AppDbContext> options, IMediator mediator) : base(options)
         {
+            _mediator = mediator;
 
         }
 
@@ -33,6 +41,21 @@ namespace hahn.Infrastructure.Presistence
             });
 
 
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var events = DomainEvents.Events.ToList();
+            DomainEvents.Clear();
+
+            var result = await base.SaveChangesAsync(cancellationToken);
+
+            foreach (var evt in events)
+            {
+                await _mediator.Publish(evt, cancellationToken);
+            }
+
+            return result;
         }
 
     }

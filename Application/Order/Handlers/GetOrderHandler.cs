@@ -1,17 +1,28 @@
 using hahn.Application.DTOs;
-using hahn.Application.Order.Queries;
+using hahn.Application.order.Queries;
 using hahn.Application.Validators;
+using hahn.Domain.Entities;
 using hahn.Domain.Repositories;
+using hahn.Infrastructure.Services;
 using MediatR;
 
-namespace hahn.Application.Order.Handlers
+namespace hahn.Application.order.Handlers
 {
     public class GetOrderHandler(IOrderRepository repository) : IRequestHandler<GetOrderQuery, CustomResult<OrderDTO>>
     {
         public async Task<CustomResult<OrderDTO>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
-            var dto = await repository.GetOrderAsync(request, cancellationToken);
-            return dto;
+            List<Order> orders;
+            if (request.buyerId.HasValue)
+            {
+                orders = await repository.GetOrderAsync(cancellationToken, request.buyerId);
+            }
+        
+            orders = await repository.GetOrderAsync(cancellationToken, request.sellerId);
+
+            var dto = OrderMapper.ToDTOList(orders);
+
+            return CustomResult<OrderDTO>.Ok(dto);
         }
     }
 }

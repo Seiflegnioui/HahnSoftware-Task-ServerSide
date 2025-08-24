@@ -1,7 +1,5 @@
-using hahn.Application.Buyer.Commands;
-using hahn.Application.Buyer.Queries;
-using hahn.Application.DTOs;
-using hahn.Application.Seller.Commands;
+using hahn.Application.buyer.Commands;
+using hahn.Application.buyer.Queries;
 using hahn.Domain.Entities;
 using hahn.Domain.Enums;
 using MediatR;
@@ -32,6 +30,7 @@ namespace hahn.API.Controllers
 
             return Ok(result.Data);
         }
+
 
         [HttpGet("get")]
         public async Task<IActionResult> GetBuyer([FromQuery] int id)
